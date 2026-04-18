@@ -1,0 +1,15 @@
+# Arquivos temporários
+*.tmp
+*.log
+.DS_Store
+
+# Dados do n8n (não versionar, pois são locais)
+.n8n/
+
+# Arquivos do sistema
+Thumbs.db
+
+# Credenciais (nunca versionar!)
+*.env
+*.key
+*.pem
