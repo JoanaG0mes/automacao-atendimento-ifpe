@@ -1,0 +1,58 @@
+========================================
+EXEMPLO 02: E-mail sobre Documentos
+========================================
+
+E-MAIL RECEBIDO DO ALUNO:
+--------------------------
+De: joao.souza@email.com
+Para: secretaria@universidade.edu.br
+Assunto: Solicitação de histórico escolar
+
+Boa tarde!
+
+Preciso do meu histórico escolar para fazer transferência para outra universidade.
+Como posso solicitar esse documento? Qual o valor e o prazo de entrega?
+
+Obrigado!
+
+João Souza
+RA: 654321
+
+
+RESPOSTA AUTOMÁTICA ENVIADA:
+-------------------------------
+De: secretaria@universidade.edu.br
+Para: joao.souza@email.com
+Assunto: Re: Solicitação de histórico escolar
+
+Prezado(a) Aluno(a),
+
+Agradecemos pelo contato sobre documentos.
+
+SOLICITAÇÃO DE DOCUMENTOS:
+
+📄 Tipos de Documentos Disponíveis:
+1. Declaração de Matrícula
+2. Histórico Escolar
+3. Certificado de Conclusão
+4. Boletim de Notas
+
+📍 Como Solicitar:
+1. Acesse o Portal do Aluno: https://portal.universidade.edu.br
+2. Menu: "Documentos" → "Solicitar Documento"
+3. Selecione o tipo de documento desejado
+4. Confira os dados e finalize a solicitação
+
+⏰ Prazo de Entrega:
+• Documentos digitais: até 24 horas
+• Documentos impressos: até 3 dias úteis
+
+💲 Taxas:
+• Declaração de Matrícula: Gratuita
+• Histórico Escolar: R$ 15,00
+• Certificado: R$ 25,00
+
+Atenciosamente,
+Secretaria Acadêmica
+Universidade Exemplo
+Telefone: (11) 99999-9999

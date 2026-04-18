@@ -1,0 +1,56 @@
+========================================
+EXEMPLO 01: E-mail sobre Matrícula
+========================================
+
+E-MAIL RECEBIDO DO ALUNO:
+--------------------------
+De: maria.silva@email.com
+Para: secretaria@universidade.edu.br
+Assunto: Dúvida sobre matrícula para o próximo semestre
+
+Olá!
+
+Meu nome é Maria Silva e sou aluna do curso de Administração.
+Gostaria de saber quando começam as matrículas para o próximo semestre
+e quais documentos eu preciso apresentar.
+
+Agradeço desde já pela atenção!
+
+Atenciosamente,
+Maria Silva
+RA: 123456
+
+
+RESPOSTA AUTOMÁTICA ENVIADA:
+-------------------------------
+De: secretaria@universidade.edu.br
+Para: maria.silva@email.com
+Assunto: Re: Dúvida sobre matrícula para o próximo semestre
+
+Prezado(a) Aluno(a),
+
+Agradecemos pelo contato sobre matrícula/inscrição.
+
+INFORMAÇÕES SOBRE MATRÍCULA:
+
+📅 Período de Matrícula: 10 a 20 de cada mês
+📋 Documentos Necessários:
+   • RG e CPF (cópias autenticadas)
+   • Histórico escolar
+   • Comprovante de residência
+   • Foto 3x4
+
+📍 Como Matricular-se:
+1. Acesse o Portal do Aluno: https://portal.universidade.edu.br
+2. Faça login com seu RA e senha
+3. Siga as instruções na seção "Matrícula"
+
+⚠️ Importante:
+- A matrícula só é confirmada após o pagamento da primeira mensalidade
+- Em caso de dúvidas, entre em contato com a Secretaria Acadêmica
+
+Atenciosamente,
+Secretaria Acadêmica
+Universidade Exemplo
+Telefone: (11) 99999-9999
+E-mail: secretaria@universidade.edu.br

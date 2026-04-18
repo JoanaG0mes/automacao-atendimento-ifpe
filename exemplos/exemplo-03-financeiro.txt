@@ -1,0 +1,58 @@
+========================================
+EXEMPLO 03: E-mail sobre Financeiro
+========================================
+
+E-MAIL RECEBIDO DO ALUNO:
+--------------------------
+De: ana.costa@email.com
+Para: secretaria@universidade.edu.br
+Assunto: Boleto da mensalidade de abril
+
+Olá!
+
+Não recebi o boleto da mensalidade deste mês.
+Poderia me enviar novamente? Também gostaria de saber se posso pagar via Pix.
+
+Atenciosamente,
+Ana Costa
+RA: 987654
+
+
+RESPOSTA AUTOMÁTICA ENVIADA:
+-------------------------------
+De: financeiro@universidade.edu.br
+Para: ana.costa@email.com
+Assunto: Re: Boleto da mensalidade de abril
+
+Prezado(a) Aluno(a),
+
+Obrigado por contatar o Departamento Financeiro!
+
+INFORMAÇÕES FINANCEIRAS:
+
+💳 Valores das Mensalidades (2026):
+• Graduação Presencial: R$ 890,00
+• Graduação EAD: R$ 450,00
+• Pós-Graduação: R$ 1.200,00
+
+📅 Vencimento:
+• Dia 10 de cada mês
+• Pagamento após vencimento: acréscimo de 2% + juros
+
+📍 Como Pagar:
+1. Portal do Aluno → Financeiro
+2. Boleto bancário (enviado por e-mail)
+3. Pix: financeiro@universidade.edu.br
+4. Cartão de crédito (recorrente disponível)
+
+📞 Contato Financeiro:
+• E-mail: financeiro@universidade.edu.br
+• Telefone: (11) 99999-8888
+• Atendimento: Seg-Sex, 09:00 às 17:00
+
+🔑 Dúvidas? Acesse nossa FAQ:
+https://universidade.edu.br/faq-financeiro
+
+Atenciosamente,
+Departamento Financeiro
+Universidade Exemplo
