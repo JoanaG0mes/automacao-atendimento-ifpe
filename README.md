@@ -1,6 +1,22 @@
-# 📧 Projeto Acadêmico: Sistema de Resposta Automática de E-mails
+# 📧 Automação de Atendimento IFPE | Projeto de Aprendizado n8n
 
-Projeto completo para apresentar ao professor! Um sistema automatizado de resposta a e-mails institucionais usando n8n.
+## 📚 Sobre o Projeto
+Este é um projeto de **aprendizado de automação com n8n** desenvolvido para o IFPE Campus Igarassu. O objetivo é criar um sistema de resposta automática de e-mails para o CRADT, otimizando o atendimento aos alunos.
+
+### 💡 O que eu aprendi:
+- Como usar a plataforma low-code **n8n** para automação de workflows
+- Integração com e-mails via IMAP/SMTP
+- Classificação de mensagens por assunto usando nós de switch
+- Criação de respostas automáticas personalizadas
+- Versionamento de código com Git e GitHub
+
+---
+
+## 🎯 Funcionalidades
+- 📥 Recebimento de e-mails institucionais
+- 🔍 Classificação por assunto (matrícula, documentos, dúvidas)
+- ✉️ Respostas automáticas personalizadas
+- 🏛️ Personalizado para o IFPE Campus Igarassu
 
 ---
 
