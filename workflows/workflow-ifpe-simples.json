@@ -1,0 +1,167 @@
+{
+  "name": "Resposta Automática IFPE (Simples)",
+  "nodes": [
+    {
+      "parameters": {
+        "event": "emailReceived",
+        "authentication": "oAuth2",
+        "postProcessAction": "nothing",
+        "format": "resolved",
+        "options": {}
+      },
+      "id": "1",
+      "name": "Receber E-mail",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 1,
+      "position": [
+        200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "assunto",
+              "value": "={{ $json.subject }}"
+            },
+            {
+              "name": "remetente",
+              "value": "={{ $json.from }}"
+            },
+            {
+              "name": "corpo",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2",
+      "name": "Extrair Dados",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        420,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "matrícula",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {},
+        "fallbackOutput": true
+      },
+      "id": "3",
+      "name": "Classificar Assunto",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        640,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "cradt@igarassu.ifpe.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nObrigado por contatar o CRADT - IFPE Campus Igarassu sobre matrícula.\n\n📅 Semestre 2026.1 começou em 11 de março de 2026.\n📋 As regras de matrícula estão na Resolução CONSUP/IFPE nº 320/2026 (CAPÍTULO IX).\n\nAcesse o portal para mais informações: https://portal.ifpe.edu.br/igarassu/\n\nAtenciosamente,\nCRADT - IFPE Campus Igarassu",
+        "options": {}
+      },
+      "id": "4",
+      "name": "Resposta: Matrícula",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        860,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "cradt@igarassu.ifpe.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nObrigado por contatar o CRADT - IFPE Campus Igarassu.\n\nRecebemos sua mensagem e em breve retornaremos.\n\nAcesse o portal: https://portal.ifpe.edu.br/igarassu/\n\nAtenciosamente,\nCRADT - IFPE Campus Igarassu",
+        "options": {}
+      },
+      "id": "5",
+      "name": "Resposta Genérica",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        860,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "Receber E-mail": {
+      "main": [
+        [
+          {
+            "node": "Extrair Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair Dados": {
+      "main": [
+        [
+          {
+            "node": "Classificar Assunto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classificar Assunto": {
+      "main": [
+        [
+          {
+            "node": "Resposta: Matrícula",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta Genérica",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "versionId": "1"
+}

@@ -1,0 +1,490 @@
+{
+  "name": "Resposta Automática Institucional",
+  "nodes": [
+    {
+      "parameters": {
+        "event": "emailReceived",
+        "authentication": "oAuth2",
+        "postProcessAction": "nothing",
+        "format": "resolved",
+        "options": {}
+      },
+      "id": "1-imap-trigger",
+      "name": "Receber E-mail (IMAP)",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 1.1,
+      "position": [
+        180,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "assunto",
+              "value": "={{ $json.subject }}"
+            },
+            {
+              "name": "remetente",
+              "value": "={{ $json.from }}"
+            },
+            {
+              "name": "corpo",
+              "value": "={{ $json.text }}"
+            },
+            {
+              "name": "data",
+              "value": "={{ $json.date }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2-extrair-dados",
+      "name": "Extrair Dados do E-mail",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "id": "cond-matricula",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "matrícula",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-matricula2",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "matricular",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-matricula3",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "inscrição",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-matricula4",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "rematrícula",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {},
+        "fallbackOutput": true
+      },
+      "id": "3-switch-assunto",
+      "name": "Classificar por Assunto",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "secretaria@universidade.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nAgradecemos pelo contato sobre matrícula/inscrição.\n\nINFORMAÇÕES SOBRE MATRÍCULA:\n\n📅 Período de Matrícula: 10 a 20 de cada mês\n📋 Documentos Necessários:\n   • RG e CPF (cópias autenticadas)\n   • Histórico escolar\n   • Comprovante de residência\n   • Foto 3x4\n\n📍 Como Matricular-se:\n1. Acesse o Portal do Aluno: https://portal.universidade.edu.br\n2. Faça login com seu RA e senha\n3. Siga as instruções na seção \"Matrícula\"\n\n⚠️ Importante:\n- A matrícula só é confirmada após o pagamento da primeira mensalidade\n- Em caso de dúvidas, entre em contato com a Secretaria Acadêmica\n\nAtenciosamente,\nSecretaria Acadêmica\nUniversidade Exemplo\nTelefone: (11) 99999-9999\nE-mail: secretaria@universidade.edu.br",
+        "options": {}
+      },
+      "id": "4-resposta-matricula",
+      "name": "Resposta: Matrícula",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.3,
+      "position": [
+        880,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "id": "cond-docs1",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "documento",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-docs2",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "certificado",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-docs3",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "histórico",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-docs4",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "declaração",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "resposta-documentos",
+      "name": "Resposta: Documentos",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        880,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "secretaria@universidade.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nAgradecemos pelo contato sobre documentos.\n\nSOLICITAÇÃO DE DOCUMENTOS:\n\n📄 Tipos de Documentos Disponíveis:\n1. Declaração de Matrícula\n2. Histórico Escolar\n3. Certificado de Conclusão\n4. Boletim de Notas\n\n📍 Como Solicitar:\n1. Acesse o Portal do Aluno: https://portal.universidade.edu.br\n2. Menu: \"Documentos\" → \"Solicitar Documento\"\n3. Selecione o tipo de documento desejado\n4. Confira os dados e finalize a solicitação\n\n⏰ Prazo de Entrega:\n• Documentos digitais: até 24 horas\n• Documentos impressos: até 3 dias úteis\n\n💲 Taxas:\n• Declaração de Matrícula: Gratuita\n• Histórico Escolar: R$ 15,00\n• Certificado: R$ 25,00\n\nAtenciosamente,\nSecretaria Acadêmica\nUniversidade Exemplo\nTelefone: (11) 99999-9999",
+        "options": {}
+      },
+      "id": "5-email-docs",
+      "name": "Enviar E-mail: Documentos",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.3,
+      "position": [
+        1100,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "id": "cond-duvida1",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "dúvida",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-duvida2",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "disciplina",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-duvida3",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "professor",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-duvida4",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "aula",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-duvida5",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "horário",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "resposta-duvidas",
+      "name": "Resposta: Dúvidas",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        880,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "secretaria@universidade.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nObrigado por contatar-nos com suas dúvidas acadêmicas!\n\nINFORMAÇÕES ÚTEIS:\n\n📅 Horários de Atendimento:\n• Secretaria Acadêmica: Seg-Sex, 08:00 às 18:00\n• Coordenação de Curso: Seg-Sex, 09:00 às 17:00\n• Biblioteca: Seg-Sáb, 07:00 às 22:00\n\n📚 Dúvidas Frequentes:\n1. Como acesso o AVA?\n   → https://ava.universidade.edu.br\n   → Login: seu RA\n   → Senha: mesma do Portal do Aluno\n\n2. Quando começam as aulas?\n   → Consulte o calendário acadêmico no Portal\n\n3. Como troco de disciplina?\n   → Protocolo na Secretaria até o 5º dia de aula\n\n👨‍🏫 Contatos Úteis:\n• Coordenação: coordenacao@universidade.edu.br\n• TI: suporte.ti@universidade.edu.br\n• Financeiro: financeiro@universidade.edu.br\n\nSe sua dúvida não foi resolvida, por favor, responda este e-mail com mais detalhes que teremos prazer em ajudar!\n\nAtenciosamente,\nSecretaria Acadêmica",
+        "options": {}
+      },
+      "id": "6-email-duvidas",
+      "name": "Enviar E-mail: Dúvidas",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.3,
+      "position": [
+        1100,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "id": "cond-fin1",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "boleto",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-fin2",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "mensalidade",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-fin3",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "pagamento",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-fin4",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "valor",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "resposta-financeiro",
+      "name": "Resposta: Financeiro",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        880,
+        550
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "financeiro@universidade.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nObrigado por contatar o Departamento Financeiro!\n\nINFORMAÇÕES FINANCEIRAS:\n\n💳 Valores das Mensalidades (2026):\n• Graduação Presencial: R$ 890,00\n• Graduação EAD: R$ 450,00\n• Pós-Graduação: R$ 1.200,00\n\n📅 Vencimento:\n• Dia 10 de cada mês\n• Pagamento após vencimento: acréscimo de 2% + juros\n\n📍 Como Pagar:\n1. Portal do Aluno → Financeiro\n2. Boleto bancário (enviado por e-mail)\n3. Pix: financeiro@universidade.edu.br\n4. Cartão de crédito (recorrente disponível)\n\n📞 Contato Financeiro:\n• E-mail: financeiro@universidade.edu.br\n• Telefone: (11) 99999-8888\n• Atendimento: Seg-Sex, 09:00 às 17:00\n\n🔑 Dúvidas? Acesse nossa FAQ:\nhttps://universidade.edu.br/faq-financeiro\n\nAtenciosamente,\nDepartamento Financeiro\nUniversidade Exemplo",
+        "options": {}
+      },
+      "id": "7-email-financeiro",
+      "name": "Enviar E-mail: Financeiro",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.3,
+      "position": [
+        1100,
+        550
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "secretaria@universidade.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nObrigado por entrar em contato conosco!\n\nRecebemos sua mensagem e um de nossos atendentes irá responder em breve.\n\n⏰ Tempo médio de resposta: até 24 horas úteis\n\n📋 Se precisar de ajuda imediata, confira:\n• Portal do Aluno: https://portal.universidade.edu.br\n• FAQ: https://universidade.edu.br/faq\n\n📞 Contatos:\n• Secretaria: (11) 99999-9999\n• E-mail: secretaria@universidade.edu.br\n\nAtenciosamente,\nSecretaria Acadêmica\nUniversidade Exemplo",
+        "options": {}
+      },
+      "id": "8-resposta-generica",
+      "name": "Resposta Genérica",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.3,
+      "position": [
+        880,
+        700
+      ]
+    }
+  ],
+  "connections": {
+    "Receber E-mail (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "Extrair Dados do E-mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair Dados do E-mail": {
+      "main": [
+        [
+          {
+            "node": "Classificar por Assunto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classificar por Assunto": {
+      "main": [
+        [
+          {
+            "node": "Resposta: Matrícula",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta: Documentos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta: Dúvidas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta: Financeiro",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta Genérica",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resposta: Documentos": {
+      "main": [
+        [
+          {
+            "node": "Enviar E-mail: Documentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resposta: Dúvidas": {
+      "main": [
+        [
+          {
+            "node": "Enviar E-mail: Dúvidas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resposta: Financeiro": {
+      "main": [
+        [
+          {
+            "node": "Enviar E-mail: Financeiro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    "Institucional",
+    "Automação",
+    "E-mail"
+  ],
+  "versionId": "1"
+}

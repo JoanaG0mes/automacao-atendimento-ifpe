@@ -1,0 +1,399 @@
+{
+  "name": "Resposta Automática IFPE Campus Igarassu",
+  "nodes": [
+    {
+      "parameters": {
+        "event": "emailReceived",
+        "authentication": "oAuth2",
+        "postProcessAction": "nothing",
+        "format": "resolved",
+        "options": {}
+      },
+      "id": "1-imap-trigger",
+      "name": "Receber E-mail (IMAP)",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 1.1,
+      "position": [
+        180,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "assunto",
+              "value": "={{ $json.subject }}"
+            },
+            {
+              "name": "remetente",
+              "value": "={{ $json.from }}"
+            },
+            {
+              "name": "corpo",
+              "value": "={{ $json.text }}"
+            },
+            {
+              "name": "data",
+              "value": "={{ $json.date }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2-extrair-dados",
+      "name": "Extrair Dados do E-mail",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "id": "cond-matricula",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "matrícula",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-matricula2",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "matricular",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-matricula3",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "inscrição",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-matricula4",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "rematrícula",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {},
+        "fallbackOutput": true
+      },
+      "id": "3-switch-assunto",
+      "name": "Classificar por Assunto",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "cradt@igarassu.ifpe.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nAgradecemos pelo contato com o CRADT - IFPE Campus Igarassu sobre matrícula/inscrição.\n\nINFORMAÇÕES SOBRE MATRÍCULA:\n\n📅 Semestre 2026.1:\n• As atividades acadêmicas começaram em 11 de março de 2026\n• O horário de aulas de 2026.1 já foi divulgado para todas as turmas\n\n📋 Regulamentação:\nAs regras sobre matrícula, renovação, trancamento, cancelamento e transferência estão previstas na **Resolução CONSUP/IFPE nº 320, de 28 de janeiro de 2026** (Organização Acadêmica Institucional), especialmente no **CAPÍTULO IX - DA MATRÍCULA DO CORPO DISCENTE**.\n\n📋 Para mais informações:\n1. Acesse o Portal do Campus Igarassu:\n   https://portal.ifpe.edu.br/igarassu/\n2. Consulte o Calendário Acadêmico de 2026 (disponível no portal)\n3. Verifique o horário de aulas da sua turma\n\n⚠️ Importante:\n• Em caso de dúvidas específicas, entre em contato diretamente com o CRADT\n\nAtenciosamente,\nCRADT - Coordenação de Registro Acadêmico e Didático\nIFPE Campus Igarassu\nSite: https://portal.ifpe.edu.br/igarassu/\nE-mail: cradt@igarassu.ifpe.edu.br",
+        "options": {}
+      },
+      "id": "4-resposta-matricula",
+      "name": "Resposta: Matrícula",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.3,
+      "position": [
+        880,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "id": "cond-docs1",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "documento",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-docs2",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "certificado",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-docs3",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "histórico",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-docs4",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "declaração",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "resposta-documentos",
+      "name": "Resposta: Documentos",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        880,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "cradt@igarassu.ifpe.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nAgradecemos pelo contato com o CRADT sobre solicitação de documentos.\n\nSOLICITAÇÃO DE DOCUMENTOS:\n\n📄 Como Solicitar:\n1. Acesse o Portal do IFPE Campus Igarassu:\n   https://portal.ifpe.edu.br/igarassu/\n2. Verifique na seção de Serviços Acadêmicos as instruções\n\n� Verificação de Autenticidade de Documentos:\nA autenticidade dos documentos emitidos pelo IFPE pode ser conferida no SEI - Sistema Eletrônico de Informações:\nhttps://sei.ifpe.edu.br/sei/controlador_externo.php?acao=documento_conferir&id_orgao_acesso_externo=0\n\n� Para mais informações:\n• Consulte o Calendário Acadêmico de 2026 para prazos importantes\n• Verifique as notícias no portal para atualizações\n• Consulte a Resolução CONSUP/IFPE nº 320, de 28 de janeiro de 2026 (Organização Acadêmica Institucional)\n\n📍 Contato CRADT:\n• E-mail: cradt@igarassu.ifpe.edu.br\n• Atendimento via WhatsApp também está disponível (verifique o número no portal)\n\nAtenciosamente,\nCRADT - Coordenação de Registro Acadêmico e Didático\nIFPE Campus Igarassu\nSite: https://portal.ifpe.edu.br/igarassu/",
+        "options": {}
+      },
+      "id": "5-email-docs",
+      "name": "Enviar E-mail: Documentos",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.3,
+      "position": [
+        1100,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false
+          },
+          "conditions": [
+            {
+              "id": "cond-duvida1",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "dúvida",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-duvida2",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "disciplina",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-duvida3",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "professor",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-duvida4",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "aula",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            },
+            {
+              "id": "cond-duvida5",
+              "leftValue": "={{ $json.assunto }} {{ $json.corpo }}",
+              "rightValue": "horário",
+              "operator": {
+                "type": "string",
+                "operation": "includes"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "resposta-duvidas",
+      "name": "Resposta: Dúvidas",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        880,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "cradt@igarassu.ifpe.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nObrigado por contatar o CRADT - IFPE Campus Igarassu com suas dúvidas acadêmicas!\n\nINFORMAÇÕES ÚTEIS:\n\n📅 Dados Importantes de 2026.1:\n• Semestre 2026.1 começou em 11 de março de 2026\n• Horário de aulas de 2026.1 já foi divulgado para todas as turmas\n• Calendário Acadêmico de 2026 está disponível no portal\n\n📚 Acesse o Portal:\nhttps://portal.ifpe.edu.br/igarassu/\n\nLá você encontra:\n• Horário de aulas\n• Calendário Acadêmico\n• Notícias e atualizações do campus\n• Informações sobre atendimento via WhatsApp\n\n📋 Documentos Oficiais:\n• Consulte a Resolução CONSUP/IFPE nº 320, de 28 de janeiro de 2026 (Organização Acadêmica Institucional)\n• Autenticidade de documentos pode ser verificada no SEI:\n  https://sei.ifpe.edu.br/sei/controlador_externo.php?acao=documento_conferir&id_orgao_acesso_externo=0\n\n📍 Contato CRADT:\n• E-mail: cradt@igarassu.ifpe.edu.br\n\nSe sua dúvida não foi resolvida, por favor, responda este e-mail com mais detalhes.\n\nAtenciosamente,\nCRADT - Coordenação de Registro Acadêmico e Didático\nIFPE Campus Igarassu\nSite: https://portal.ifpe.edu.br/igarassu/",
+        "options": {}
+      },
+      "id": "6-email-duvidas",
+      "name": "Enviar E-mail: Dúvidas",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.3,
+      "position": [
+        1100,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "cradt@igarassu.ifpe.edu.br",
+        "toEmail": "={{ $json.remetente }}",
+        "subject": "=Re: {{ $json.assunto }}",
+        "emailType": "text",
+        "message": "Prezado(a) Aluno(a),\n\nObrigado por entrar em contato com o CRADT - IFPE Campus Igarassu!\n\nRecebemos sua mensagem e um de nossos atendentes irá responder em breve.\n\n📋 Se precisar de ajuda imediata, confira:\n• Portal do Campus Igarassu: https://portal.ifpe.edu.br/igarassu/\n• Lá você encontra o Calendário Acadêmico de 2026, horário de aulas e todas as notícias\n• Atendimento via WhatsApp também está disponível (verifique o número no portal)\n\n⏰ Tempo médio de resposta: até 24 horas úteis\n\n📍 Contato CRADT:\n• E-mail: cradt@igarassu.ifpe.edu.br\n\nAtenciosamente,\nCRADT - Coordenação de Registro Acadêmico e Didático\nIFPE Campus Igarassu\nSite: https://portal.ifpe.edu.br/igarassu/",
+        "options": {}
+      },
+      "id": "8-resposta-generica",
+      "name": "Resposta Genérica",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.3,
+      "position": [
+        880,
+        550
+      ]
+    }
+  ],
+  "connections": {
+    "Receber E-mail (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "Extrair Dados do E-mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair Dados do E-mail": {
+      "main": [
+        [
+          {
+            "node": "Classificar por Assunto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classificar por Assunto": {
+      "main": [
+        [
+          {
+            "node": "Resposta: Matrícula",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta: Documentos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta: Dúvidas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta Genérica",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resposta: Documentos": {
+      "main": [
+        [
+          {
+            "node": "Enviar E-mail: Documentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resposta: Dúvidas": {
+      "main": [
+        [
+          {
+            "node": "Enviar E-mail: Dúvidas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    "IFPE",
+    "Igarassu",
+    "CRADT",
+    "Institucional",
+    "Automação"
+  ],
+  "versionId": "1"
+}
